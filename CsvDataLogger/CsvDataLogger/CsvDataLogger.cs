@@ -1,20 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Xml;
 
 namespace CsvDataLogger
 {
     public class CsvDataLogger : IDisposable, ICsvDataLogger
     {
-        public string WorkingDirectory { get; set; }
+        private string _workingDirectory = "./";
+        public string WorkingDirectory
+        {
+            get { return _workingDirectory; }
+            set {
+                bool dirExists = Directory.Exists(value);
+                if (dirExists)
+                {
+                    _workingDirectory = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Specified Workingdirectory does not exist");
+                }
+            }
+        }
+
+
         public string FileName { get; private set; }
 
         private List<ICsvColumn> Columns=new List<ICsvColumn>();
         //ToDo: Relation DataLogger to Receiver needs to be inverted. DataLogger Interface needs to be Receiver interface.
         private readonly ICsvDataReceiver _csvDataReceiver;
 
-        public CsvDataLogger(string logFileName)
+        public CsvDataLogger(string fileName,string workingDirectory = "./")
         {
+            bool dirExists = Directory.Exists(workingDirectory);
+            if (dirExists)
+            {
+                WorkingDirectory = workingDirectory;
+            }
+            else
+            {
+                throw new ArgumentException("Specified Workingdirectory does not exist");
+            }
+
+            FileName = fileName;
             _csvDataReceiver = CsvFactory.GetNewCsvDataReceiver(this);
         }
 

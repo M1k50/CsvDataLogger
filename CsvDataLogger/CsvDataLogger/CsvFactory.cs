@@ -1,6 +1,6 @@
 ﻿namespace CsvDataLogger
 {
-    static class CsvFactory
+    internal static class CsvFactory
     {
         public static ICsvColumn GetNewCsvColumn(string header)
         {
