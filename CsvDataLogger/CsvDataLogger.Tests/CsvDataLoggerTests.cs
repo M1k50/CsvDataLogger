@@ -1,8 +1,9 @@
 using System;
-using System.IO.Enumeration;
+using System.IO;
 using Xunit;
 using CsvDataLogger;
 using Xunit.Sdk;
+using Moq;
 
 namespace CsvDataLogger.Tests
 {
@@ -13,7 +14,7 @@ namespace CsvDataLogger.Tests
         {
             //Arange
             string expFilename = "TestFilename";
-            ICsvDataLogger Logger = new CsvDataLogger(expFilename);
+            ICsvDataLogger Logger = new CsvWriter(expFilename);
 
             //Act
             string actFilename = Logger.FileName;
@@ -28,7 +29,7 @@ namespace CsvDataLogger.Tests
         public void SetDirectory_ShouldReturnDirectory(string name, string expected )
         {
             //Arange
-            ICsvDataLogger Logger = new CsvDataLogger(name, expected);
+            ICsvDataLogger Logger = new CsvWriter(name, expected);
 
             //Act
             string actDirectory = Logger.WorkingDirectory;
@@ -47,7 +48,7 @@ namespace CsvDataLogger.Tests
 
             //Assert
             ICsvDataLogger CsvDataLogger;
-            Assert.Throws<ArgumentException>(()=> CsvDataLogger = new CsvDataLogger(filename,outputDir));
+            Assert.Throws<ArgumentException>(()=> CsvDataLogger = new CsvWriter(filename,outputDir));
 
         }
     }

@@ -2,36 +2,36 @@
 {
     public class CsvDataReceiver : ICsvDataReceiver
     {
-        private ICsvDataLogger _csvDataLogger;
+        private ICsvDataLogger _csvWriter;
 
-        public CsvDataReceiver(CsvDataLogger csvDataLogger)
+        public CsvDataReceiver(CsvWriter csvWriter)
         {
-            _csvDataLogger = csvDataLogger;
+            _csvWriter = csvWriter;
         }
 
         public void LogData(int index, string header, int entry)
         {
-            _csvDataLogger.LogData(index,header,entry.ToString());
+            _csvWriter.LogData(index,header,entry.ToString());
         }
 
         public void LogData(int index, string header, double entry)
         {
-            _csvDataLogger.LogData(index, header, entry.ToString());
+            _csvWriter.LogData(index, header, entry.ToString());
         }
 
         public void LogData(int index, string header, long entry)
         {
-            _csvDataLogger.LogData(index, header, entry.ToString());
+            _csvWriter.LogData(index, header, entry.ToString());
         }
 
         public void LogData(int index, string header, bool entry)
         {
-            _csvDataLogger.LogData(index, header, entry.ToString());
+            _csvWriter.LogData(index, header, entry.ToString());
         }
 
         public void LogData(int index, string header, string entry)
         {
-            _csvDataLogger.LogData(index, header, entry);
+            _csvWriter.LogData(index, header, entry);
         }
     }
 }

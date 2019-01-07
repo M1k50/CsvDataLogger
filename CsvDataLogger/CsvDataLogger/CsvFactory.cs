@@ -8,9 +8,9 @@
             return newColumn;
         }
 
-        public static ICsvDataReceiver GetNewCsvDataReceiver(CsvDataLogger csvDataLogger)
+        public static ICsvDataReceiver GetNewCsvDataReceiver(CsvWriter csvWriter)
         {
-            ICsvDataReceiver newReceiver = new CsvDataReceiver(csvDataLogger);
+            ICsvDataReceiver newReceiver = new CsvDataReceiver(csvWriter);
             return newReceiver;
         }
     }
