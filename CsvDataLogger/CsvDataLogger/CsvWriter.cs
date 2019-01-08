@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using CsvHelper;
-using FileNameHelper;
+using FileHelper;
 
 namespace CsvDataLogger
 {
@@ -14,7 +14,7 @@ namespace CsvDataLogger
         private readonly ICsvDataReceiver _csvDataReceiver;
 
         private CsvHelper.CsvWriter _csvWriter;
-        private FileHelper.FileHelper _fileHelper = new FileHelper.FileHelper();
+        private IFileHelper _fileHelper = new FileHelper.FileHelper();
         private StreamWriter _streamWriter;
         private string _workingDirectory = "./";
         private List<ICsvColumn> Columns = new List<ICsvColumn>();
@@ -25,19 +25,19 @@ namespace CsvDataLogger
             _csvDataReceiver = CsvFactory.GetNewCsvDataReceiver(this);
 
 
-            _streamWriter =new StreamWriter();
+            //_streamWriter =new StreamWriter();
         }
 
         public string FileName { get; private set; }
 
-        public int FullFilepath
-        {
-            get
-            {
-                string output = string.Format("{0}{1}.csv", _workingDirectory, FileName)
-                return myVar;
-            }
-        }
+        //public int FullFilepath
+        //{
+        //    get
+        //    {
+        //        string output = string.Format("{0}{1}.csv", _workingDirectory, FileName)
+        //        return _fileHelper.filepath;
+        //    }
+        //}
 
         public string WorkingDirectory
         {
@@ -70,8 +70,8 @@ namespace CsvDataLogger
         private string GetFilepath(string filename, string workingDirectory)
         {
             //ToDo: Check Filename. If used, add Counter until free Name is found.
-            FileNameHepler helper = new FileNameHepler(filename,workingDirectory);
-            string output = helper.GetFilepath;
+            //FileNameHepler helper = new FileNameHepler(filename,workingDirectory);
+            //string output = helper.GetFilepath;
 
             return output;
         }

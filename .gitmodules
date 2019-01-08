@@ -1,0 +1,4 @@
+[submodule "Libs/FileNameHelper"]
+	path = Libs/FileNameHelper
+	url = https://github.com/M1k50/FileNameHelper.git
+	branch = master
