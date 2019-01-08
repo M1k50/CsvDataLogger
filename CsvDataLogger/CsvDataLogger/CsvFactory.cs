@@ -8,7 +8,7 @@
             return newColumn;
         }
 
-        public static ICsvDataReceiver GetNewCsvDataReceiver(CsvWriter csvWriter)
+        public static ICsvDataReceiver GetNewCsvDataReceiver(CsvDataWriter csvWriter)
         {
             ICsvDataReceiver newReceiver = new CsvDataReceiver(csvWriter);
             return newReceiver;

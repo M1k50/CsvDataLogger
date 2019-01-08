@@ -14,7 +14,7 @@ namespace CsvDataLogger.Tests
         {
             //Arange
             string expFilename = "TestFilename";
-            ICsvDataLogger Logger = new CsvWriter(expFilename);
+            ICsvFileHandler Logger = new CsvDataWriter(expFilename);
 
             //Act
             string actFilename = Logger.FileName;
@@ -29,7 +29,7 @@ namespace CsvDataLogger.Tests
         public void SetDirectory_ShouldReturnDirectory(string name, string expected )
         {
             //Arange
-            ICsvDataLogger Logger = new CsvWriter(name, expected);
+            ICsvFileHandler Logger = new CsvDataWriter(name, expected);
 
             //Act
             string actDirectory = Logger.WorkingDirectory;
@@ -47,8 +47,8 @@ namespace CsvDataLogger.Tests
             string outputDir = "";
 
             //Assert
-            ICsvDataLogger CsvDataLogger;
-            Assert.Throws<ArgumentException>(()=> CsvDataLogger = new CsvWriter(filename,outputDir));
+            ICsvFileHandler CsvDataLogger;
+            Assert.Throws<ArgumentException>(()=> CsvDataLogger = new CsvDataWriter(filename,outputDir));
 
         }
     }

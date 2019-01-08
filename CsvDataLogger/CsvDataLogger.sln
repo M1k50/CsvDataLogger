@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "CsvDataLoggerDiagram", "CsvDataLoggerDiagram\CsvDataLoggerDiagram.modelproj", "{10DD98CD-50D4-43DF-B433-CB0E0FA75912}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvDataLogger", "CsvDataLogger\CsvDataLogger.csproj", "{6B46346C-1346-4F7B-826E-B638C2D1D408}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvDataLogger.Tests", "CsvDataLogger.Tests\CsvDataLogger.Tests.csproj", "{513F5CB9-A58A-469D-9724-55D798E72314}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{424E0BE9-609F-43AE-A8D8-3E7D7A23C570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileHelper", "..\Libs\FileNameHelper\FileHelper\FileHelper.csproj", "{66AB740B-DCB1-41B9-9ACE-66FC5770E2DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileNameHelper", "..\Libs\FileNameHelper\FileNameHelper\FileNameHelper.csproj", "{66AB740B-DCB1-41B9-9ACE-66FC5770E2DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10DD98CD-50D4-43DF-B433-CB0E0FA75912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10DD98CD-50D4-43DF-B433-CB0E0FA75912}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10DD98CD-50D4-43DF-B433-CB0E0FA75912}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10DD98CD-50D4-43DF-B433-CB0E0FA75912}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B46346C-1346-4F7B-826E-B638C2D1D408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B46346C-1346-4F7B-826E-B638C2D1D408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B46346C-1346-4F7B-826E-B638C2D1D408}.Release|Any CPU.ActiveCfg = Release|Any CPU
