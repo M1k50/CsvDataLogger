@@ -11,6 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{424E0BE9-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileNameHelper", "..\Libs\FileNameHelper\FileNameHelper\FileNameHelper.csproj", "{66AB740B-DCB1-41B9-9ACE-66FC5770E2DF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86625496-9111-4879-B56B-4A9D444D1A25}"
+	ProjectSection(SolutionItems) = preProject
+		CsvDataLogger\CsvDataLogger_CodeMap.dgml = CsvDataLogger\CsvDataLogger_CodeMap.dgml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

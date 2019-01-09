@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Runtime.InteropServices;
 using System.Xml;
 using CsvHelper;
@@ -8,32 +9,57 @@ using FileNameHelper;
 
 namespace CsvDataLogger
 {
-    public class CsvDataWriter : IDisposable, ICsvFileHandler
+    /// <summary>
+    /// Sorts and stores received data until writen to output file.
+    /// </summary>
+    internal class CsvDataWriter : IDisposable, ICsvDataWriter
     {
-        //ToDo: Relation DataLogger to Receiver needs to be inverted. DataLogger Interface needs to be Receiver interface.
-        private readonly ICsvDataReceiver _csvDataReceiver;
-
+        private CsvWriter _csvHelperWriter;
+        private string _directory;
+        private string _filepath;
+        private string _fullFileName;
         private IFileNameHelper _fileNameHelper;
-        private StreamWriter _streamWriter;
-        private CsvWriter _csvWriter;
-
-        public CsvDataWriter(string fileName, string workingDirectory = "./")
+        public CsvDataWriter(string fullFilename, string directory = "./", IFileSystem filesystem = null)
         {
-            Directory = workingDirectory;
-            FileName = fileName;
-            _csvDataReceiver = CsvFactory.GetNewCsvDataReceiver(this);
-
-
-            //_streamWriter =new StreamWriter();
+            _fileNameHelper = Factory.GetFileNameHeper(fullFilename, directory, filesystem);
+            
+            StreamWriter streamWriter = new StreamWriter(_fileNameHelper.Filepath,true);
+            _csvHelperWriter = Factory.GetCswHelperWriter(streamWriter);
         }
-
-        public string FileName { get; set; }
-
         public string Directory
         {
-            get => _cs;
-            set => _workingDirectory = _fileNameHelper.GetDirectory(value, true);
+            get => _directory;
+            set
+            {
+                _fileNameHelper.Directory = value;
+                _directory = _fileNameHelper.Directory;
+            }
         }
+
+        public string Filepath
+        {
+            get => _filepath;
+            set
+            {
+                _fileNameHelper.Filepath = value;
+                _filepath = _fileNameHelper.Filepath;
+            }
+        }
+
+        public string FullFileName
+        {
+            get => _fullFileName;
+            set
+            {
+                _fileNameHelper.FullFilename = value;
+                _fullFileName = _fileNameHelper.FullFilename;
+            }
+        }
+        public void CloseFile()
+        {
+
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -44,11 +70,5 @@ namespace CsvDataLogger
             // Find Column or Create new
             // Add Data to Column
         }
-
-        public void CloseFile()
-        {
-            
-        }
-
     }
 }

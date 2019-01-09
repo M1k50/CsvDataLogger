@@ -1,17 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FileHelper;
+﻿using System.IO;
+using System.IO.Abstractions;
+using CsvHelper;
+using FileNameHelper;
 
 namespace CsvDataLogger
 {
-    class Factory
+    internal static class Factory
     {
-        public IFileHelper NewFileHelper()
+        internal static ICsvDataWriter GetDataWriter(string fullFileName, string directory ="")
         {
-            return new IFileHelper();
+            ICsvDataWriter output = new CsvDataWriter(fullFileName,directory);
+            return output;
+        }
+
+        internal static IFileNameHelper GetFileNameHeper(string fullFilename, string directory,IFileSystem filesystem)
+        {
+            IFileNameHelper output = new FileNameHelper.FileNameHelper(fullFilename: fullFilename, directory: directory,fileSystem: filesystem);
+            return output;
+        }
+
+        internal static CsvWriter GetCswHelperWriter(StreamWriter streamWriter)
+        {
+            CsvWriter output = new CsvWriter(streamWriter);
+            return output;
         }
     }
 }
