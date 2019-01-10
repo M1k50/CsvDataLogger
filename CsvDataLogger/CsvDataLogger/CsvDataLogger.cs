@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace CsvDataLogger
     {
         private ICsvDataWriter _csvDataWriter;
 
-        public CsvDataLogger(string fullFilename, string directory = null)
+        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null)
         {
-            _csvDataWriter = Factory.GetDataWriter(fullFilename,directory);
+            _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
             Filepath = _csvDataWriter.Filepath;
                 
         }

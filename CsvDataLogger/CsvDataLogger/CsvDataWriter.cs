@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Xml;
 using CsvHelper;
 using FileNameHelper;
@@ -14,46 +16,65 @@ namespace CsvDataLogger
     /// </summary>
     internal class CsvDataWriter : IDisposable, ICsvDataWriter
     {
+        private StreamWriter _streamWriter;
+
         private CsvWriter _csvHelperWriter;
+        private IFileSystem _fileSystem;
         private string _directory;
         private string _filepath;
         private string _fullFileName;
+        private string _delimiter;
         private IFileNameHelper _fileNameHelper;
-        public CsvDataWriter(string fullFilename, string directory = "./", IFileSystem filesystem = null)
+        public CsvDataWriter(string fullFilename, string directory = "./", string delimiter=",", bool createMissingDirectory = false, IFileSystem filesystem = null)
         {
-            _fileNameHelper = Factory.GetFileNameHeper(fullFilename, directory, filesystem);
-            
-            StreamWriter streamWriter = new StreamWriter(_fileNameHelper.Filepath,true);
-            _csvHelperWriter = Factory.GetCswHelperWriter(streamWriter);
+            SetupFileNameHelper(fullFilename, directory, createMissingDirectory, filesystem);
+
+            SetupCsvHelperWriter();
+
         }
+
+        private void SetupFileNameHelper(string fullFilename, string directory, bool createMissingDirectory, IFileSystem filesystem)
+        {
+            SetFileSystem(filesystem);
+            _fileNameHelper = Factory.GetFileNameHeper(fullFilename, directory, createMissingDirectory, _fileSystem);
+        }
+
+        private void SetupCsvHelperWriter()
+        {
+            _streamWriter = new StreamWriter(Filepath);
+            _csvHelperWriter = Factory.GetCswHelperWriter(_streamWriter);
+            _csvHelperWriter.Configuration.Delimiter = _delimiter;
+        }
+
+        private void SetFileSystem(IFileSystem fileSystem)
+        {
+            if (fileSystem == null)
+            {
+                _fileSystem = new FileSystem();
+            }
+            else
+            {
+                _fileSystem = fileSystem;
+            }
+        }
+
         public string Directory
         {
-            get => _directory;
-            //set
-            //{
-            //    _fileNameHelper.Directory = value;
-            //    _directory = _fileNameHelper.Directory;
-            //}
+            get => _fileNameHelper.Directory;
+            set => _fileNameHelper.Directory = value;
+
         }
 
         public string Filepath
         {
-            get => _filepath;
-            //set
-            //{
-            //    _fileNameHelper.Filepath = value;
-            //    _filepath = _fileNameHelper.Filepath;
-            //}
+            get => _fileNameHelper.Filepath;
+            set => _fileNameHelper.Filepath = value;
         }
 
         public string FullFileName
         {
-            get => _fullFileName;
-            //set
-            //{
-            //    _fileNameHelper.FullFilename = value;
-            //    _fullFileName = _fileNameHelper.FullFilename;
-            //}
+            get => _fileNameHelper.FullFilename;
+            set => _fileNameHelper.FullFilename = value;
         }
         public void CloseFile()
         {
@@ -67,7 +88,11 @@ namespace CsvDataLogger
 
         public void LogData(int index, string header, string entry)
         {
+            string line = $"Header1{Environment.NewLine}Col1Row1";
+            _csvHelperWriter.Wr(line);
+            _csvHelperWriter.NextRecord();
 
+            DataTable
         }
     }
 }
