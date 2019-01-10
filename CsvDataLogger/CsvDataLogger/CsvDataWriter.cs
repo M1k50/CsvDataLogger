@@ -29,31 +29,31 @@ namespace CsvDataLogger
         public string Directory
         {
             get => _directory;
-            set
-            {
-                _fileNameHelper.Directory = value;
-                _directory = _fileNameHelper.Directory;
-            }
+            //set
+            //{
+            //    _fileNameHelper.Directory = value;
+            //    _directory = _fileNameHelper.Directory;
+            //}
         }
 
         public string Filepath
         {
             get => _filepath;
-            set
-            {
-                _fileNameHelper.Filepath = value;
-                _filepath = _fileNameHelper.Filepath;
-            }
+            //set
+            //{
+            //    _fileNameHelper.Filepath = value;
+            //    _filepath = _fileNameHelper.Filepath;
+            //}
         }
 
         public string FullFileName
         {
             get => _fullFileName;
-            set
-            {
-                _fileNameHelper.FullFilename = value;
-                _fullFileName = _fileNameHelper.FullFilename;
-            }
+            //set
+            //{
+            //    _fileNameHelper.FullFilename = value;
+            //    _fullFileName = _fileNameHelper.FullFilename;
+            //}
         }
         public void CloseFile()
         {
@@ -67,8 +67,7 @@ namespace CsvDataLogger
 
         public void LogData(int index, string header, string entry)
         {
-            // Find Column or Create new
-            // Add Data to Column
+
         }
     }
 }
