@@ -33,6 +33,8 @@ namespace CsvDataLogger.Tests
             //Assert
             Assert.Equal(expectedFileText, actualFileText);
 
+            logger.Dispose();
+
         }
 
         //[Fact]

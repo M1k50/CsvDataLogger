@@ -14,7 +14,7 @@ namespace CsvDataLogger
         public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null)
         {
             _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
-            Filepath = _csvDataWriter.Filepath;
+            //Filepath = _csvDataWriter.Filepath;
                 
         }
                 
@@ -29,7 +29,7 @@ namespace CsvDataLogger
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _csvDataWriter.Dispose();
         }
 
         public void LogData(int index, string header, int entry)

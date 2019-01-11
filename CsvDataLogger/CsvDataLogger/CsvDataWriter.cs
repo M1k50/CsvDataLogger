@@ -42,8 +42,10 @@ namespace CsvDataLogger
         private void SetupCsvHelperWriter()
         {
             _streamWriter = new StreamWriter(Filepath);
+                
             _csvHelperWriter = Factory.GetCswHelperWriter(_streamWriter);
             _csvHelperWriter.Configuration.Delimiter = _delimiter;
+
         }
 
         private void SetFileSystem(IFileSystem fileSystem)
@@ -83,16 +85,20 @@ namespace CsvDataLogger
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _streamWriter.Dispose();
+            _csvHelperWriter.Dispose();
+            _fileSystem = null;
         }
 
         public void LogData(int index, string header, string entry)
         {
             string line = $"Header1{Environment.NewLine}Col1Row1";
-            _csvHelperWriter.Wr(line);
-            _csvHelperWriter.NextRecord();
+            _streamWriter.WriteLine(line);
+            _streamWriter.Flush();
+            //_csvHelperWriter.WriteField<string>(line);
+            //_csvHelperWriter.NextRecord();
 
-            DataTable
+            
         }
     }
 }
