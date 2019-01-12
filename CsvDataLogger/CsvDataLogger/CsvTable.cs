@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,14 @@ namespace CsvDataLogger
 {
     class CsvTable
     {
-
-        public int Row { get; set; }
-        public int Column { get; set; }
         public List<CsvEntry> Entries { get; set; }
+        public List<string> Headers { get; set; }
+        public void WriteCell(string column, int row, string entry)
+        {
+
+        }
+        public void 
+
+        private DataTable _table;
     }
 }

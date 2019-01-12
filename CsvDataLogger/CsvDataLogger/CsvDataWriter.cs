@@ -16,68 +16,57 @@ namespace CsvDataLogger
     /// </summary>
     internal class CsvDataWriter : IDisposable, ICsvDataWriter
     {
-        private StreamWriter _streamWriter;
-
         private CsvWriter _csvHelperWriter;
-        private IFileSystem _fileSystem;
-        private string _directory;
-        private string _filepath;
-        private string _fullFileName;
         private string _delimiter;
+        private string _directory;
         private IFileNameHelper _fileNameHelper;
+        private string _filepath;
+        private IFileSystem _fileSystem;
+        private string _fullFileName;
+        private StreamWriter _streamWriter;
+        private CsvTable _table;
         public CsvDataWriter(string fullFilename, string directory = "./", string delimiter=",", bool createMissingDirectory = false, IFileSystem filesystem = null)
         {
             SetupFileNameHelper(fullFilename, directory, createMissingDirectory, filesystem);
+
+            //_fullFileName = _fileNameHelper.FullFilename;
+            //_directory = _fileNameHelper.Directory;
+            _filepath = _fileNameHelper.Filepath;
 
             SetupCsvHelperWriter();
 
         }
 
-        private void SetupFileNameHelper(string fullFilename, string directory, bool createMissingDirectory, IFileSystem filesystem)
-        {
-            SetFileSystem(filesystem);
-            _fileNameHelper = Factory.GetFileNameHeper(fullFilename, directory, createMissingDirectory, _fileSystem);
-        }
-
-        private void SetupCsvHelperWriter()
-        {
-            _streamWriter = new StreamWriter(Filepath);
-                
-            _csvHelperWriter = Factory.GetCswHelperWriter(_streamWriter);
-            _csvHelperWriter.Configuration.Delimiter = _delimiter;
-
-        }
-
-        private void SetFileSystem(IFileSystem fileSystem)
-        {
-            if (fileSystem == null)
-            {
-                _fileSystem = new FileSystem();
-            }
-            else
-            {
-                _fileSystem = fileSystem;
-            }
-        }
-
         public string Directory
         {
-            get => _fileNameHelper.Directory;
-            set => _fileNameHelper.Directory = value;
-
+            get => _directory;
+            set
+            {
+                _fileNameHelper.Directory = value;
+                _directory = _fileNameHelper.Directory;
+            }
         }
 
         public string Filepath
         {
-            get => _fileNameHelper.Filepath;
-            set => _fileNameHelper.Filepath = value;
+            get => _filepath;
+            set
+            {
+                _fileNameHelper.Filepath = value;
+                _filepath = _fileNameHelper.Filepath;
+            }
         }
 
         public string FullFileName
         {
-            get => _fileNameHelper.FullFilename;
-            set => _fileNameHelper.FullFilename = value;
+            get => _fullFileName;
+            set
+            {
+                _fileNameHelper.FullFilename = value;
+                _fullFileName = _fileNameHelper.FullFilename;
+            }
         }
+
         public void CloseFile()
         {
 
@@ -98,7 +87,33 @@ namespace CsvDataLogger
             //_csvHelperWriter.WriteField<string>(line);
             //_csvHelperWriter.NextRecord();
 
-            
+
+        }
+
+        private void SetFileSystem(IFileSystem fileSystem)
+        {
+            if (fileSystem == null)
+            {
+                _fileSystem = new FileSystem();
+            }
+            else
+            {
+                _fileSystem = fileSystem;
+            }
+        }
+
+        private void SetupCsvHelperWriter()
+        {
+            _streamWriter = _fileSystem.File.CreateText(Filepath);
+            _csvHelperWriter = Factory.GetCswHelperWriter(_streamWriter);
+            _csvHelperWriter.Configuration.Delimiter = _delimiter;
+
+        }
+
+        private void SetupFileNameHelper(string fullFilename, string directory, bool createMissingDirectory, IFileSystem filesystem)
+        {
+            SetFileSystem(filesystem);
+            _fileNameHelper = Factory.GetFileNameHeper(fullFilename, directory, createMissingDirectory, _fileSystem);
         }
     }
 }

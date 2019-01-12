@@ -3,6 +3,7 @@ using System.IO;
 using Xunit;
 using CsvDataLogger;
 using Xunit.Sdk;
+using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 
@@ -18,21 +19,20 @@ namespace CsvDataLogger.Tests
             string fullFilename = "test.csv";
             string directory = @"C:\temp\";
             MockFileSystem fileSystem = new MockFileSystem();
-            CsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true/*,fileSystem*/);
+            CsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem);
 
-            string header = "Header1";
-            int row = 1;
-            string c1r1Entry = "Col1Row1";
-            string expectedFileText = $"{header}{Environment.NewLine}{c1r1Entry}";
+            string header1 = "1";
+            int row1 = 1;
+            string entry1 = $"Cell_{header1}{row1}";
+            string expectedFileText = $"Cell_{header1}{entry1}{Environment.NewLine}";
 
             //Act
-            logger.LogData(row, header, c1r1Entry);
+            logger.LogData(row1, header1, entry1);
             MockFileData mockFile = fileSystem.GetFile(logger.Filepath);
             string actualFileText = mockFile.TextContents;
 
             //Assert
             Assert.Equal(expectedFileText, actualFileText);
-
             logger.Dispose();
 
         }
