@@ -37,6 +37,21 @@ namespace CsvDataLogger.Tests
 
         }
 
+        [Theory]
+        [InlineData(1, 1, "Cell1Row1")]
+        [InlineData(3, 3, "Cell3Row3")]
+        [InlineData(1000, 10, "Cell1Row1")]
+
+
+        public void CsvTable_ShouldReturnWrittenValue(int row, int column, string data)
+        {
+            //Arange
+            CsvDataLogger.CsvTable table = new CsvDataLogger.CsvTable();
+            //Act
+
+            //Assert
+        }
+
         //[Fact]
         //public void SetFilname_ShouldReturnFilename()
         //{

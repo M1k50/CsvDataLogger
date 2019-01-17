@@ -9,14 +9,39 @@ namespace CsvDataLogger
 {
     class CsvTable
     {
-        public List<CsvEntry> Entries { get; set; }
-        public List<string> Headers { get; set; }
-        public void WriteCell(string column, int row, string entry)
+        public CsvTable()
+        {
+            InitializeTable();
+
+        }
+
+        public CsvTable(List<DataColumn> columns)
         {
 
         }
-        public void 
 
-        private DataTable _table;
+        public DataTable _table { get; private set; }
+        public void AddColumn(string columnName)
+        {
+            _table.Columns.Add(columnName);
+        }
+
+        public void WriteCell(string column, int row, string entry)
+        {
+            try
+            {
+                //_table.Columns[i]
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void InitializeTable()
+        {
+            _table = new DataTable();
+        }
     }
 }
