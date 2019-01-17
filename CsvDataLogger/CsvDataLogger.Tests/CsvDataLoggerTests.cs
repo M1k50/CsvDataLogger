@@ -1,10 +1,5 @@
 using System;
-using System.IO;
 using Xunit;
-using CsvDataLogger;
-using Xunit.Sdk;
-using System.IO;
-using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 
 
@@ -21,13 +16,13 @@ namespace CsvDataLogger.Tests
             MockFileSystem fileSystem = new MockFileSystem();
             CsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem);
 
-            string header1 = "1";
-            int row1 = 1;
-            string entry1 = $"Cell_{header1}{row1}";
-            string expectedFileText = $"Cell_{header1}{entry1}{Environment.NewLine}";
+            string column = "1";
+            int row = 1;
+            string entry1 = $"Cell_{row}{column}";
+            string expectedFileText = $"{column}{Environment.NewLine}Cell_{row}{column}{Environment.NewLine}";
 
             //Act
-            logger.LogData(row1, header1, entry1);
+            logger.LogData(row, column, entry1);
             MockFileData mockFile = fileSystem.GetFile(logger.Filepath);
             string actualFileText = mockFile.TextContents;
 
@@ -38,18 +33,23 @@ namespace CsvDataLogger.Tests
         }
 
         [Theory]
-        [InlineData(1, 1, "Cell1Row1")]
-        [InlineData(3, 3, "Cell3Row3")]
-        [InlineData(1000, 10, "Cell1Row1")]
+        [InlineData(1, "1", "Cell1Row1")]
+        [InlineData(3, "3", "Cell3Row3")]
+        [InlineData(1000, "10", "Cell10Row1000")]
 
 
-        public void CsvTable_ShouldReturnWrittenValue(int row, int column, string data)
+        public void CsvTable_ShouldReturnWrittenValue(int row, string column, string data)
         {
             //Arange
-            CsvDataLogger.CsvTable table = new CsvDataLogger.CsvTable();
+            ICsvTable table = new CsvTable();
+
             //Act
+            table.WriteCell(row,column, data);
+            string expectedValue = data;
+            string actualValue = table.ReadCell( row,column);
 
             //Assert
+            Assert.Equal(expectedValue, actualValue);
         }
 
         //[Fact]

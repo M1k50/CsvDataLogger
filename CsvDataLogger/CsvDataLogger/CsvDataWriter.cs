@@ -79,15 +79,9 @@ namespace CsvDataLogger
             _fileSystem = null;
         }
 
-        public void LogData(int index, string header, string entry)
+        public void LogData(int row, string column, string entry)
         {
-            string line = $"Header1{Environment.NewLine}Col1Row1";
-            _streamWriter.WriteLine(line);
-            _streamWriter.Flush();
-            //_csvHelperWriter.WriteField<string>(line);
-            //_csvHelperWriter.NextRecord();
-
-
+            _table.WriteCell(row, column, entry);
         }
 
         private void SetFileSystem(IFileSystem fileSystem)

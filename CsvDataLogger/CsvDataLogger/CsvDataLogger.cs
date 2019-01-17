@@ -32,29 +32,29 @@ namespace CsvDataLogger
             _csvDataWriter.Dispose();
         }
 
-        public void LogData(int index, string header, int entry)
+        public void LogData(int index, string column, int entry)
         {
-            _csvDataWriter.LogData(index, header, entry.ToString());
+            _csvDataWriter.LogData(index, column, entry.ToString());
         }
 
-        public void LogData(int index, string header, double entry)
+        public void LogData(int index, string column, double entry)
         {
-            _csvDataWriter.LogData(index, header, entry.ToString());
+            _csvDataWriter.LogData(index, column, entry.ToString());
         }
 
-        public void LogData(int index, string header, long entry)
+        public void LogData(int index, string column, long entry)
         {
-            _csvDataWriter.LogData(index, header, entry.ToString());
+            _csvDataWriter.LogData(index, column, entry.ToString());
         }
 
-        public void LogData(int index, string header, bool entry)
+        public void LogData(int index, string column, bool entry)
         {
-            _csvDataWriter.LogData(index, header, entry.ToString());
+            _csvDataWriter.LogData(index, column, entry.ToString());
         }
 
-        public void LogData(int index, string header, string entry)
+        public void LogData(int index, string column, string entry)
         {
-            _csvDataWriter.LogData(index, header, entry);
+            _csvDataWriter.LogData(index, column, entry);
         }
     }
 }

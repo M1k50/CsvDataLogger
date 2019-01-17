@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CsvDataLogger
 {
-    class CsvTable
+    public class CsvTable : ICsvTable
     {
         public CsvTable()
         {
@@ -15,33 +15,43 @@ namespace CsvDataLogger
 
         }
 
-        public CsvTable(List<DataColumn> columns)
-        {
+        public DataTable Table { get; private set; }
 
+        public string ReadCell(int row,string column)
+        {
+            string output = null;
+
+            bool columnExists = Table.Columns.Contains(column);
+            bool rowExists = Table.Rows.Contains(row);
+            if (columnExists && rowExists)
+            {
+                output = Table.Rows[row][column].ToString();
+            }
+
+            return output;
         }
 
-        public DataTable _table { get; private set; }
-        public void AddColumn(string columnName)
+        public void WriteCell(int row,string column, string entry)
         {
-            _table.Columns.Add(columnName);
-        }
-
-        public void WriteCell(string column, int row, string entry)
-        {
-            try
+            bool colExists = Table.Columns.Contains(column);
+            if (!colExists)
             {
-                //_table.Columns[i]
+                Table.Columns.Add(column);
             }
-            catch (Exception)
+            bool rowExists = Table.Rows.Contains(row);
+            if (!rowExists)
             {
-
-                throw;
+                Table.Rows.Add(row);
+            
             }
+            Table.Rows[row][column] = entry;
+            
         }
 
         private void InitializeTable()
         {
-            _table = new DataTable();
+            Table = new DataTable();
         }
     }
 }
+

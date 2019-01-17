@@ -53,11 +53,11 @@
   <ItemGroup>
     <Compile Include="CsvTable.cs" />
     <Compile Include="CsvDataLogger.cs" />
-    <Compile Include="CsvEntry.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="CsvDataWriter.cs" />
     <Compile Include="ICsvDataLogger.cs" />
     <Compile Include="ICsvDataWriter.cs" />
+    <Compile Include="ICsvTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
