@@ -1,7 +1,8 @@
 using System;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
-
+using System.Data;
+using System.Collections.Generic;
 
 namespace CsvDataLogger.Tests
 {
@@ -38,7 +39,7 @@ namespace CsvDataLogger.Tests
         [InlineData(1000, "10", "Cell10Row1000")]
 
 
-        public void CsvTable_ShouldReturnWrittenValue(int row, string column, string data)
+        public void CsvTable_ShouldReturnSingleWrittenValue(int row, string column, string data)
         {
             //Arange
             ICsvTable table = new CsvTable();
@@ -52,47 +53,56 @@ namespace CsvDataLogger.Tests
             Assert.Equal(expectedValue, actualValue);
         }
 
-        //[Fact]
-        //public void SetFilname_ShouldReturnFilename()
-        //{
-        //    //Arange
-        //    string expFilename = "TestFilename";
-        //    ICsvDataLogger logger = new CsvDataLogger();
+        [Fact]
+        public void CsvTable_ShouldReturnWrittenTableValues()
+        {
+            //Arange
+            int maxIndex = 10;
+            int maxColumns = 20;
+            ICsvTable table = new CsvTable();
 
-        //    //Act
-        //    string actFilename = logger.FullFileName;
+            int r1 = 1;
+            string c1 = "1";
+            string expected1 = "1";
+            table.WriteCell(r1, c1, expected1);
 
-        //    //Assert
-        //    Assert.Equal(expFilename, actFilename);
-        //}
+            int r2 = 24308;
+            string c2 = "Header";
+            string expected2 = "TestEntry";
+            table.WriteCell(r2, c2, expected2);
 
-        //[Theory]
-        //[InlineData("Test", "./")]
-        //[InlineData("Test", "C:/")]
-        //public void SetDirectory_ShouldReturnDirectory(string name, string expected)
-        //{
-        //    //Arange
-        //    ICsvDataLogger logger = new CsvDataLogger();
 
-        //    //Act
-        //    string actDirectory = logger.Directory;
+            //Act
+            string actual1 = table.ReadCell(r1, c1);
+            string actual2 = table.ReadCell(r2, c2);
 
-        //    //Assert
-        //    Assert.Equal(expected, actDirectory);
+            //Assert
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected2, actual2);
 
-        //}
+        }
 
-        //[Fact]
-        //public void SetWrongDirectory_ShouldThrowArgumentException()
-        //{
-        //    //Arange
-        //    string filename = "test";
-        //    string outputDir = "";
+        [Fact]
+        public void CsvTable_OverwrittenCellShouldReturnLastValue()
+        {
+            //Arange
+            int maxIndex = 10;
+            int maxColumns = 20;
+            ICsvTable table = new CsvTable();
 
-        //    //Assert
-        //    ICsvDataLogger logger;
-        //    Assert.Throws<ArgumentException>(() => logger = new CsvDataLogger());
+            int r1 = 24308;
+            string c1 = "Header";
+            string e1 = "1";
+            string expected = "TestEntry";
+            table.WriteCell(r1, c1, e1);
+            table.WriteCell(r1, c1, expected);
 
-        //}
+            //Act
+            string actual = table.ReadCell(r1, c1);
+
+            //Assert
+            Assert.Equal(expected, actual);
+
+        }
     }
 }
