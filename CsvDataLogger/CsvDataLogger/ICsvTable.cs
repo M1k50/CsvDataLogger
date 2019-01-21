@@ -6,7 +6,7 @@ namespace CsvDataLogger
     {
         DataTable Table { get; }
 
-        void WriteCell(int row, string column, string entry);
-        string ReadCell(int row, string column);
+        void WriteCell(int index, string column, string entry);
+        string ReadCell(int index, string column);
     }
 }

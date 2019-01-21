@@ -1,4 +1,6 @@
-﻿namespace CsvDataLogger
+﻿using System.Data;
+
+namespace CsvDataLogger
 {
     public interface ICsvDataWriter
     {
@@ -6,7 +8,9 @@
         string Filepath { get; set; }
         string FullFileName { get; set; }
 
-        void CloseFile();
+        //void CloseFile();
         void Dispose();
+        void WriteDataTable(DataTable dataTable);
+        void FlushFilestream();
     }
 }

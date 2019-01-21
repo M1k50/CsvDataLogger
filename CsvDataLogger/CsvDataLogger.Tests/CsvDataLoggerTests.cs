@@ -1,9 +1,11 @@
 using System;
+using System.IO;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using System.Data;
 using System.Collections.Generic;
 using CsvDataLogger;
+using System.IO.Abstractions;
 
 namespace CsvDataLogger.Tests
 {
@@ -15,24 +17,51 @@ namespace CsvDataLogger.Tests
             //Arrange
             string fullFilename = "test.csv";
             string directory = @"C:\temp\";
+            string indexColumnName = "index";
             MockFileSystem fileSystem = new MockFileSystem();
-            ICsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem);
+            ICsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem,indexColumnName);
 
-            string column = "1";
-            int row = 1;
-            string entry1 = $"Cell_{row}{column}";
-            string expectedFileText = $"{column}{Environment.NewLine}Cell_{row}{column}{Environment.NewLine}";
+            string column = "TestColumn";
+            int index = int.MaxValue;
+            string entry1 = $"TestEntry";
+            string expectedFileText = $"{indexColumnName},{column}{Environment.NewLine}{index},{entry1}{Environment.NewLine}";
 
             //Act
-            logger.LogData(row, column, entry1);
+            logger.LogData(index, column, entry1);
+            logger.FlushBuffer();
             MockFileData mockFile = fileSystem.GetFile(logger.Filepath);
             string actualFileText = mockFile.TextContents;
 
             //Assert
             Assert.Equal(expectedFileText, actualFileText);
+
             logger.Dispose();
 
         }
+
+        //[Fact]
+        //public void CsvDataLogger_ValidData_ShouldCreateRealFile()
+        //{
+        //    //Arrange
+        //    string fullFilename = "test.csv";
+        //    string directory = @"C:\temp\";
+        //    IFileSystem fileSystem = new FileSystem();
+        //    ICsvDataLogger logger = new CsvDataLogger(fullFilename, directory, true, fileSystem);
+
+        //    string column = "TestColumn1";
+        //    int index = 13;
+        //    string entry1 = $"Entry:Index:{index}, Column:{column}";
+        //    string expectedFileText = $"{column}{Environment.NewLine}Cell_{index}{column}{Environment.NewLine}";
+
+        //    //Act
+        //    logger.LogData(index, column, entry1);
+        //    logger.WriteLogBuffer();
+        //    logger.Dispose();
+        //    string actualFileText = System.IO.File.ReadAllText(logger.Filepath);
+
+        //    //Assert
+        //    Assert.Equal(expectedFileText, actualFileText);
+        //}
 
         [Theory]
         [InlineData(1, "1", "Cell1Row1")]
@@ -43,7 +72,7 @@ namespace CsvDataLogger.Tests
         public void CsvTable_ShouldReturnSingleWrittenValue(int row, string column, string data)
         {
             //Arange
-            ICsvTable table = new CsvTable();
+            ICsvTable table = Factory.GetCsvDataTable();
 
             //Act
             table.WriteCell(row,column, data);
@@ -58,9 +87,7 @@ namespace CsvDataLogger.Tests
         public void CsvTable_ShouldReturnWrittenTableValues()
         {
             //Arange
-            int maxIndex = 10;
-            int maxColumns = 20;
-            ICsvTable table = new CsvTable();
+            ICsvTable table = Factory.GetCsvDataTable();
 
             int r1 = 1;
             string c1 = "1";
@@ -89,7 +116,7 @@ namespace CsvDataLogger.Tests
             //Arange
             int maxIndex = 10;
             int maxColumns = 20;
-            ICsvTable table = new CsvTable();
+            ICsvTable table = Factory.GetCsvDataTable();
 
             int r1 = 24308;
             string c1 = "Header";

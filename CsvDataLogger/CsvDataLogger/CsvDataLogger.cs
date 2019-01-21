@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace CsvDataLogger
 {
-    public class CsvDataLogger : ICsvDataWriter, ICsvDataLogger
+    public class CsvDataLogger : ICsvDataLogger
     {
         private ICsvDataWriter _csvDataWriter;
-        private CsvTable _csvTable;
+        private ICsvTable _csvTable;
 
-        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null)
+        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null,string indexColumnName = "index")
         {
             _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
-                
+            _csvTable = Factory.GetCsvDataTable(indexColumnName);
         }
                 
         public string Directory { get => _csvDataWriter.Directory; set => _csvDataWriter.Directory=value; }
@@ -24,12 +24,19 @@ namespace CsvDataLogger
 
         public void CloseFile()
         {
-            _csvDataWriter.CloseFile();
+            //_csvDataWriter.CloseFile();
         }
 
         public void Dispose()
         {
+            _csvDataWriter.FlushFilestream();
             _csvDataWriter.Dispose();
+        }
+
+        public void FlushBuffer()
+        {
+            _csvDataWriter.WriteDataTable(_csvTable.Table);
+            _csvDataWriter.FlushFilestream();
         }
 
         public void LogData(int index, string column, int entry)
