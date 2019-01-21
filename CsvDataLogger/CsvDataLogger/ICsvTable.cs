@@ -8,5 +8,6 @@ namespace CsvDataLogger
 
         void WriteCell(int index, string column, string entry);
         string ReadCell(int index, string column);
+        void Sort();
     }
 }

@@ -10,17 +10,21 @@ namespace CsvDataLogger
     public class CsvDataLogger : ICsvDataLogger
     {
         private ICsvDataWriter _csvDataWriter;
-        private ICsvTable _csvTable;
+        public ICsvTable CsvTable { get; private set; }
+        private bool _sortTableColumns;
 
-        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null,string indexColumnName = "index")
+        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null,string indexColumnName = "index",bool sortTableColumns =false)
         {
             _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
-            _csvTable = Factory.GetCsvDataTable(indexColumnName);
+            CsvTable = Factory.GetCsvDataTable(indexColumnName);
+            _sortTableColumns = sortTableColumns;
+
         }
                 
         public string Directory { get => _csvDataWriter.Directory; set => _csvDataWriter.Directory=value; }
         public string Filepath { get => _csvDataWriter.Filepath; set => _csvDataWriter.Filepath=value; }
         public string FullFileName { get => _csvDataWriter.FullFileName; set => _csvDataWriter.FullFileName=value; }
+        public bool SortTableColumns { get => _sortTableColumns; set => _sortTableColumns = value; }
 
         public void CloseFile()
         {
@@ -35,7 +39,11 @@ namespace CsvDataLogger
 
         public void FlushBuffer()
         {
-            _csvDataWriter.WriteDataTable(_csvTable.Table);
+            if (_sortTableColumns)
+            {
+                CsvTable.Sort();
+            }
+            _csvDataWriter.WriteDataTable(CsvTable.Table);
             _csvDataWriter.FlushFilestream();
         }
 
@@ -65,7 +73,7 @@ namespace CsvDataLogger
 
         public void LogData(int index, string column, string entry)
         {
-            _csvTable.WriteCell(index, column, entry);
+            CsvTable.WriteCell(index, column, entry);
         }
     }
 }

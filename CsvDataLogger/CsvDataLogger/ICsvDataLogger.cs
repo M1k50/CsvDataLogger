@@ -1,7 +1,13 @@
-﻿namespace CsvDataLogger
+﻿
+namespace CsvDataLogger
 {
     public interface ICsvDataLogger
     {
+        /// <summary>
+        /// True: Table columns in csv-file are sorted by column name.
+        /// False: Table columns appear in the order of creation.
+        /// </summary>
+        bool SortTableColumns { get; set; }
         /// <summary>
         /// The output directory for the .csv file.
         /// </summary>
@@ -14,6 +20,8 @@
         /// The .csv. filename including the extension.
         /// </summary>
         string FullFileName { get; set; }
+        ICsvTable CsvTable { get; }
+
         /// <summary>
         /// Closes the filestream to the logfile and disposes the datalogger including helper classes.
         /// </summary>

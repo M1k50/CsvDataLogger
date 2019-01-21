@@ -17,7 +17,7 @@ namespace CsvDataLogger.Tests
             //Arrange
             string fullFilename = "test.csv";
             string directory = @"C:\temp\";
-            string indexColumnName = "index";
+            string indexColumnName = "Index";
             MockFileSystem fileSystem = new MockFileSystem();
             ICsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem,indexColumnName);
 
@@ -114,8 +114,6 @@ namespace CsvDataLogger.Tests
         public void CsvTable_OverwrittenCellShouldReturnLastValue()
         {
             //Arange
-            int maxIndex = 10;
-            int maxColumns = 20;
             ICsvTable table = Factory.GetCsvDataTable();
 
             int r1 = 24308;
@@ -133,6 +131,87 @@ namespace CsvDataLogger.Tests
             //Assert
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected2, actual2);
+        }
+
+        [Fact]
+        public void Logger_SortColumns_DataIsConsistent()
+        {
+            //Arrange
+            string fullFilename = "test.csv";
+            string directory = @"C:\temp\";
+            string indexColumnName = "Index";
+            bool sortColumns = true;
+            //MockFileSystem fileSystem = new MockFileSystem();
+            IFileSystem fileSystem= new FileSystem();
+            ICsvDataLogger logger = new CsvDataLogger(fullFilename, directory, true, fileSystem, indexColumnName, sortColumns);
+
+            //Act
+            DataTable referenceTable = new DataTable();
+
+            int expectedColumns = 10;
+            List<int> expectedColumnNames = GenerateDiscretePointsList(expectedColumns, 1000);
+            int expectedRows = 10;
+
+            foreach (int col in expectedColumnNames)
+            {
+                string colName = col.ToString();
+                referenceTable.Columns.Add(colName);
+
+            }
+
+            for (int index = 0; index < expectedRows; index++)
+            {
+                foreach (int col in expectedColumnNames)
+                {
+                    string entry = CellEntry(index, col);
+                    logger.LogData(index, col.ToString(), entry);
+                }
+            }
+            logger.FlushBuffer();
+
+            //Assert
+            int actualRows = logger.CsvTable.Table.Rows.Count;
+            int actualColumns = logger.CsvTable.Table.Columns.Count;
+            for (int index = 0; index < expectedRows; index++)
+            {
+                for (int column = 0; column < expectedColumns; column++)
+                {
+                    string columnName = referenceTable.Columns[column].ColumnName;
+                    string expectedEntry = referenceTable.Rows[index][columnName].ToString();
+                    string actualEntry = logger.CsvTable.ReadCell(index, columnName);
+                    Assert.Equal(expectedEntry, actualEntry);
+                }
+            }
+            logger.Dispose();
+        }
+
+        private static string CellEntry(int index, int column)
+        {
+            string output= $"ind:{index} col:{column}";
+            return output;
+        }
+
+        private List<int> GenerateDiscretePointsList(int elements, int range)
+        {
+            List<int> output = new List<int>();
+            while (output.Count<elements)
+            {
+                Random rndNum = new Random();
+                int element = rndNum.Next(range);
+                bool numberContained = output.Contains(element);
+                if (!numberContained)
+                {
+                    output.Add(element);
+                }
+
+            }
+            return output;
+        }
+
+        [Fact]
+        public void CsvTable_SortColumns_Multiple_DataIsConsistent()
+        {
+
         }
     }
 }

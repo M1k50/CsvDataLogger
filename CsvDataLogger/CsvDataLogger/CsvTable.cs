@@ -79,21 +79,10 @@ namespace CsvDataLogger
 
         private void InitializeTable()
         {
-            string keyColumnName = "key";
             Table = new DataTable()
             {
-                //TableName = "CsvTable",
                 Columns =
                 {
-                    //new DataColumn()
-                    //{
-                    //    ReadOnly = true,
-                    //    AutoIncrement=true,
-                    //    Unique=true,
-                    //    ColumnName=keyColumnName,
-                    //    Caption=keyColumnName,
-                    //},
-
                     new DataColumn()
                     {
                         ReadOnly=false,
@@ -113,6 +102,13 @@ namespace CsvDataLogger
 
         }
 
+        public void Sort()
+        {
+            DataView dataView = Table.DefaultView;
+            dataView.Sort = Table.Columns[0].ColumnName;
+            Table = dataView.ToTable();
+
+        }
     }
 }
 
