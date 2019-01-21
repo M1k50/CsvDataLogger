@@ -9,14 +9,14 @@ namespace CsvDataLogger
 {
     public class CsvTable : ICsvTable
     {
-        public CsvTable()
+        public CsvTable(string indexColumnName = "index")
         {
+            _tableIndexName = indexColumnName;
             InitializeTable();
             
         }
 
         public DataTable Table { get; private set; }
-        private string _tableKeyName = "Key";
         private string _tableIndexName = "Index";
         public string ReadCell(int index,string column)
         {
@@ -27,7 +27,7 @@ namespace CsvDataLogger
             if (columnExists && rowExists)
             {
 
-                string query = $"{_tableIndexName} = {index}";
+                string query = queryIndex(index);
                 DataRow[] results = Table.Select(query);
                 int numberOfRows = results.Count();
                 if (numberOfRows > 1) { throw new Exception("Multiple rows with equal index number found. Index must be unique!"); }
@@ -58,18 +58,31 @@ namespace CsvDataLogger
             }
             else
             {
-                Table.Rows[index][column] = entry;
+                string searchString = queryIndex(index);
+                DataRow[] result = Table.Select(searchString);
+                int numRowsFound = result.Count();
+                if (numRowsFound >1 )
+                {
+                    throw new Exception("Multiple entries with equal index found. Index must be unique");
+                }
+                result[0][column] = entry;
+
             }
             Table.AcceptChanges();
             
         }
 
+        private string queryIndex(int index)
+        {
+            return $"{_tableIndexName} = {index}";
+        }
+
         private void InitializeTable()
         {
-            string primKeyColTitle = _tableKeyName;
+            string keyColumnName = "key";
             Table = new DataTable()
             {
-                TableName = "CsvTable",
+                //TableName = "CsvTable",
                 Columns =
                 {
                     //new DataColumn()
@@ -77,9 +90,10 @@ namespace CsvDataLogger
                     //    ReadOnly = true,
                     //    AutoIncrement=true,
                     //    Unique=true,
-                    //    ColumnName=_tableKeyName,
-                    //    Caption=_tableKeyName,
+                    //    ColumnName=keyColumnName,
+                    //    Caption=keyColumnName,
                     //},
+
                     new DataColumn()
                     {
                         ReadOnly=false,

@@ -8,6 +8,5 @@
 
         void CloseFile();
         void Dispose();
-        void LogData(int index, string header, string entry);
     }
 }

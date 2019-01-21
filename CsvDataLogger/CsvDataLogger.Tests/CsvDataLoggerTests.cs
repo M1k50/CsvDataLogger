@@ -3,19 +3,20 @@ using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using System.Data;
 using System.Collections.Generic;
+using CsvDataLogger;
 
 namespace CsvDataLogger.Tests
 {
     public class CsvDataLoggerTests
     {
         [Fact]
-        public void LogData_ValidData_ShouldCreateFile()
+        public void CsvDataLogger_ValidData_ShouldCreateFile()
         {
             //Arrange
             string fullFilename = "test.csv";
             string directory = @"C:\temp\";
             MockFileSystem fileSystem = new MockFileSystem();
-            CsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem);
+            ICsvDataLogger logger = new CsvDataLogger(fullFilename,directory,true,fileSystem);
 
             string column = "1";
             int row = 1;
@@ -92,17 +93,19 @@ namespace CsvDataLogger.Tests
 
             int r1 = 24308;
             string c1 = "Header";
-            string e1 = "1";
-            string expected = "TestEntry";
-            table.WriteCell(r1, c1, e1);
-            table.WriteCell(r1, c1, expected);
+            string expected1 = "TestEntry1";
 
+            string expected2 = "TestEntry2";
             //Act
-            string actual = table.ReadCell(r1, c1);
+            table.WriteCell(r1, c1, expected1);
+            string actual1 = table.ReadCell(r1, c1);
+
+            table.WriteCell(r1, c1, expected2);
+            string actual2 = table.ReadCell(r1, c1);
 
             //Assert
-            Assert.Equal(expected, actual);
-
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected2, actual2);
         }
     }
 }

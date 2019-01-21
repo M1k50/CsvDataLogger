@@ -24,7 +24,7 @@ namespace CsvDataLogger
         private IFileSystem _fileSystem;
         private string _fullFileName;
         private StreamWriter _streamWriter;
-        private CsvTable _table;
+
         public CsvDataWriter(string fullFilename, string directory = "./", string delimiter=",", bool createMissingDirectory = false, IFileSystem filesystem = null)
         {
             SetupFileNameHelper(fullFilename, directory, createMissingDirectory, filesystem);
@@ -77,11 +77,6 @@ namespace CsvDataLogger
             _streamWriter.Dispose();
             _csvHelperWriter.Dispose();
             _fileSystem = null;
-        }
-
-        public void LogData(int row, string column, string entry)
-        {
-            _table.WriteCell(row, column, entry);
         }
 
         private void SetFileSystem(IFileSystem fileSystem)

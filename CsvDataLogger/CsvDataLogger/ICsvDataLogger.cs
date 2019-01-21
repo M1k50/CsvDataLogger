@@ -10,6 +10,7 @@
         void Dispose();
         void LogData(int row, string column, bool entry);
         void LogData(int row, string column, double entry);
+        void LogData(int row, string column, float entry);
         void LogData(int row, string column, int entry);
         void LogData(int row, string column, long entry);
         void LogData(int row, string column, string entry);

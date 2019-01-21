@@ -10,11 +10,11 @@ namespace CsvDataLogger
     public class CsvDataLogger : ICsvDataWriter, ICsvDataLogger
     {
         private ICsvDataWriter _csvDataWriter;
+        private CsvTable _csvTable;
 
         public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null)
         {
             _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
-            //Filepath = _csvDataWriter.Filepath;
                 
         }
                 
@@ -34,27 +34,31 @@ namespace CsvDataLogger
 
         public void LogData(int index, string column, int entry)
         {
-            _csvDataWriter.LogData(index, column, entry.ToString());
+            LogData(index, column, entry.ToString());
         }
 
         public void LogData(int index, string column, double entry)
         {
-            _csvDataWriter.LogData(index, column, entry.ToString());
+            LogData(index, column, entry.ToString());
+        }
+        public void LogData(int index, string column, float entry)
+        {
+            LogData(index, column, entry.ToString());
         }
 
         public void LogData(int index, string column, long entry)
         {
-            _csvDataWriter.LogData(index, column, entry.ToString());
+            LogData(index, column, entry.ToString());
         }
 
         public void LogData(int index, string column, bool entry)
         {
-            _csvDataWriter.LogData(index, column, entry.ToString());
+            LogData(index, column, entry.ToString());
         }
 
         public void LogData(int index, string column, string entry)
         {
-            _csvDataWriter.LogData(index, column, entry);
+            _csvTable.WriteCell(index, column, entry);
         }
     }
 }
