@@ -13,12 +13,12 @@ namespace CsvDataLogger
         {
             _tableIndexName = indexColumnName;
             InitializeTable();
-            
+
         }
 
         public DataTable Table { get; private set; }
         private string _tableIndexName = "Index";
-        public string ReadCell(int index,string column)
+        public string ReadCell(int index, string column)
         {
             string output = null;
 
@@ -38,7 +38,7 @@ namespace CsvDataLogger
             return output;
         }
 
-        public void WriteCell(int index,string column, string entry)
+        public void WriteCell(int index, string column, string entry)
         {
             bool colExists = Table.Columns.Contains(column);
             if (!colExists)
@@ -61,7 +61,7 @@ namespace CsvDataLogger
                 string searchString = queryIndex(index);
                 DataRow[] result = Table.Select(searchString);
                 int numRowsFound = result.Count();
-                if (numRowsFound >1 )
+                if (numRowsFound > 1)
                 {
                     throw new Exception("Multiple entries with equal index found. Index must be unique");
                 }
@@ -69,7 +69,7 @@ namespace CsvDataLogger
 
             }
             Table.AcceptChanges();
-            
+
         }
 
         private string queryIndex(int index)
@@ -88,16 +88,12 @@ namespace CsvDataLogger
                         ReadOnly=false,
                         AutoIncrement=false,
                         Unique=true,
-                        ColumnName=_tableIndexName,
-                        Caption=_tableIndexName
+                        ColumnName=_tableIndexName
                     }
                 },
             };
 
-            DataColumn[] primaryKeyColumn = new DataColumn[1];
-            primaryKeyColumn[0]= Table.Columns[_tableIndexName];
-            Table.PrimaryKey = primaryKeyColumn;
-            
+            SetPrimaryKey();
             Table.AcceptChanges();
 
         }
@@ -107,8 +103,14 @@ namespace CsvDataLogger
             DataView dataView = Table.DefaultView;
             dataView.Sort = Table.Columns[0].ColumnName;
             Table = dataView.ToTable();
+            SetPrimaryKey();
+        }
 
+        private void SetPrimaryKey()
+        {
+            DataColumn[] primaryKeyColumn = new DataColumn[1];
+            primaryKeyColumn[0] = Table.Columns[_tableIndexName];
+            Table.PrimaryKey = primaryKeyColumn;
         }
     }
 }
-

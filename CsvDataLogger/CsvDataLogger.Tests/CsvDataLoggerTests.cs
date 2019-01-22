@@ -6,13 +6,14 @@ using System.Data;
 using System.Collections.Generic;
 using CsvDataLogger;
 using System.IO.Abstractions;
+using System.Linq;
 
 namespace CsvDataLogger.Tests
 {
     public class CsvDataLoggerTests
     {
         [Fact]
-        public void CsvDataLogger_ValidData_ShouldCreateFile()
+        public void Logger_ValidData_ShouldCreateFile()
         {
             //Arrange
             string fullFilename = "test.csv";
@@ -111,7 +112,7 @@ namespace CsvDataLogger.Tests
         }
 
         [Fact]
-        public void CsvTable_OverwrittenCellShouldReturnLastValue()
+        public void CsvTable_OverwrittenCell_ShouldReturnLastValue()
         {
             //Arange
             ICsvTable table = Factory.GetCsvDataTable();
@@ -146,7 +147,7 @@ namespace CsvDataLogger.Tests
             ICsvDataLogger logger = new CsvDataLogger(fullFilename, directory, true, fileSystem, indexColumnName, sortColumns);
 
             //Act
-            DataTable referenceTable = new DataTable();
+            DataTable referenceTable = InitializeReferenceTable(); //ToDo: Use InitializeReferenceTable()
 
             int expectedColumns = 10;
             List<int> expectedColumnNames = GenerateDiscretePointsList(expectedColumns, 1000);
@@ -161,11 +162,15 @@ namespace CsvDataLogger.Tests
 
             for (int index = 0; index < expectedRows; index++)
             {
+                DataRow newRow = referenceTable.NewRow();
                 foreach (int col in expectedColumnNames)
                 {
+                    string colName = col.ToString();
                     string entry = CellEntry(index, col);
-                    logger.LogData(index, col.ToString(), entry);
+                    logger.LogData(index, colName, entry);
+                    newRow[colName] = entry;
                 }
+                referenceTable.Rows.Add(newRow);
             }
             logger.FlushBuffer();
 
@@ -209,9 +214,71 @@ namespace CsvDataLogger.Tests
         }
 
         [Fact]
-        public void CsvTable_SortColumns_Multiple_DataIsConsistent()
+        public void Logger_SortColumns_Multiple_DataIsConsistent()
         {
+            //Arrange
+            string fullFilename = "test.csv";
+            string directory = @"C:\temp\";
+            string indexColumnName = "Index";
+            MockFileSystem fileSystem = new MockFileSystem();
+            ICsvDataLogger logger = new CsvDataLogger(fullFilename, directory, true, fileSystem, indexColumnName);
+
+            //Act
+            DataTable referenceTable = InitializeReferenceTable();
+
+            int expectedColumns = 10;
+            List<int> expectedColumnNames = Enumerable.Range(0, expectedColumns ).ToList<int>();
+            int expectedRows = 10;
+
+            foreach (int col in expectedColumnNames)
+            {
+                string colName = col.ToString();
+                referenceTable.Columns.Add(colName);
+            }
+
+            for (int index = 0; index < expectedRows; index++)
+            {
+                DataRow newRow = referenceTable.NewRow();
+                foreach (int col in expectedColumnNames)
+                {
+                    string colName = col.ToString();
+                    string entry = CellEntry(index, col);
+                    logger.LogData(index, colName, entry);
+                    newRow[colName] = entry;
+                }
+                referenceTable.Rows.Add(newRow);
+            }
+            referenceTable.AcceptChanges();
+            logger.FlushBuffer();
+
+            //Assert
 
         }
+
+        private DataTable InitializeReferenceTable()
+        {
+            DataTable output = new DataTable()
+            {
+                Columns =
+                {
+                    new DataColumn()
+                    {
+                        ReadOnly=false,
+                        AutoIncrement=true,
+                        Unique=true,
+                        ColumnName="Index"
+                    }
+                },
+            };
+
+            DataColumn[] primaryKeyColumn = new DataColumn[1];
+            primaryKeyColumn[0] = output.Columns[0];
+            output.PrimaryKey = primaryKeyColumn;
+
+            output.AcceptChanges();
+
+            return output;
+        }
+
     }
 }

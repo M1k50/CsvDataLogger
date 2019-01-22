@@ -13,17 +13,17 @@ namespace CsvDataLogger
         public ICsvTable CsvTable { get; private set; }
         private bool _sortTableColumns;
 
-        public CsvDataLogger(string fullFilename, string directory = null,bool createMissingDirectory = false ,IFileSystem fileSystem=null,string indexColumnName = "index",bool sortTableColumns =false)
+        public CsvDataLogger(string fullFilename, string directory = null, bool createMissingDirectory = false, IFileSystem fileSystem = null, string indexColumnName = "index", bool sortTableColumns = false)
         {
-            _csvDataWriter = Factory.GetDataWriter(fullFilename,directory,createMissingDirectory,fileSystem);
+            _csvDataWriter = Factory.GetDataWriter(fullFilename, directory, createMissingDirectory, fileSystem);
             CsvTable = Factory.GetCsvDataTable(indexColumnName);
             _sortTableColumns = sortTableColumns;
 
         }
-                
-        public string Directory { get => _csvDataWriter.Directory; set => _csvDataWriter.Directory=value; }
-        public string Filepath { get => _csvDataWriter.Filepath; set => _csvDataWriter.Filepath=value; }
-        public string FullFileName { get => _csvDataWriter.FullFileName; set => _csvDataWriter.FullFileName=value; }
+
+        public string Directory { get => _csvDataWriter.Directory; set => _csvDataWriter.Directory = value; }
+        public string Filepath { get => _csvDataWriter.Filepath; set => _csvDataWriter.Filepath = value; }
+        public string FullFileName { get => _csvDataWriter.FullFileName; set => _csvDataWriter.FullFileName = value; }
         public bool SortTableColumns { get => _sortTableColumns; set => _sortTableColumns = value; }
 
         public void CloseFile()
